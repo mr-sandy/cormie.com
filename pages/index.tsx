@@ -292,7 +292,6 @@ up5.below = up3;
 const Home: NextPage = () => {
   const [image, setImage] = useState(centre1);
 
-
   useEffect(() => {
     console.log('======== DO THIS ONCE =========')
 
@@ -465,7 +464,7 @@ const Home: NextPage = () => {
       font-weight: 50;
     }
     `}</style>
-      <h1>Hello world! {image.name}</h1>
+      <h1>{image.name}</h1>
       <img src={`./${image.name}`} />
     </>
   );
