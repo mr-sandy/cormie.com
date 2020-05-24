@@ -7,7 +7,8 @@
     "dev": "next",
     "build": "next build",
     "start": "next start",
-    "export": "next build; next export"
+    "export": "next build; next export",
+    "resize-images": "magick './source-images/*.jpg[900x900]' -set filename:f '%t' './public/%[filename:f].jpg'"
   },
   "keywords": [],
   "author": "",
