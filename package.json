@@ -7,6 +7,8 @@
     "dev": "next",
     "build": "next build",
     "start": "next start",
+    "test": "jest",
+    "test:watch": "jest --watch",
     "export": "next build; next export",
     "resize-images": "magick './source-images/*.jpg[900x900]' -set filename:f '%t' './public/%[filename:f].jpg'"
   },
@@ -20,8 +22,11 @@
     "ts-keycode-enum": "^1.0.6"
   },
   "devDependencies": {
+    "@types/jest": "^25.2.3",
     "@types/node": "^13.9.5",
     "@types/react": "^16.9.27",
+    "jest": "^26.0.1",
+    "ts-jest": "^26.1.0",
     "typescript": "^3.8.3"
   }
 }
