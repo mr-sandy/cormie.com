@@ -1,5 +1,4 @@
 export enum GameState {
-  NoGame,
   SettingUp,
   Started
 }

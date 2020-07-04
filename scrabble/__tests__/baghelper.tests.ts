@@ -1,4 +1,4 @@
-import { initialiseBag } from '../../helpers/bagHelper';
+import { initialiseBag } from '../helpers/bagHelper';
 
 describe('when comparing tiles', () => {
   const result = initialiseBag();

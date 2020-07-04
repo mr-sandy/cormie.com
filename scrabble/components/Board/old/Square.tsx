@@ -1,5 +1,5 @@
-import { Cell, BonusType } from '../../types';
-import TileComponent from '../TIleComponent';
+import { Cell, BonusType } from '../../../types';
+import TileComponent from '../../TileComponent';
 
 const determineColour = (cell: Cell) => {
   switch (cell.bonus) {

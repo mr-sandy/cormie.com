@@ -1,10 +1,10 @@
-import { reducer, initialState } from '../../reducer';
-import { AppState, GameState } from '../../types';
-import * as Actions from '../../actions';
+import { reducer, initialState } from '../reducer';
+import { AppState, GameState } from '../types';
+import { ActionTypes, Action } from '../actions';
 
 describe('when using initialState', () => {
-  it('should have state of NoGame', () => {
-    expect(initialState.gameState).toBe(GameState.NoGame);
+  it('should have state of SettingUp', () => {
+    expect(initialState.gameState).toBe(GameState.SettingUp);
   });
 
   it('should fill the bag with 100 tiles', () => {
@@ -25,8 +25,9 @@ describe('when setting up a new game', () => {
     ...initialState,
     gameState: GameState.Started,
     bag: initialState.bag.slice(50)
-  };;
-  const action = Actions.newGame();
+  };
+
+  const action: Action = { type: ActionTypes.NEW_GAME };
 
   const result = reducer(state, action);
 
@@ -46,7 +47,8 @@ describe('when setting up a new game', () => {
 
 describe('when adding a new player', () => {
   const state: AppState = initialState;
-  const action = Actions.addPlayer('Player 1');
+
+  const action: Action = { type: ActionTypes.ADD_PLAYER, name: 'Player 1' };
 
   const result = reducer(state, action);
 
@@ -65,7 +67,7 @@ describe('when starting a game', () => {
     ]
   };
 
-  const action = Actions.startGame();
+  const action: Action = { type: ActionTypes.START_GAME };
 
   const result = reducer(state, action);
 

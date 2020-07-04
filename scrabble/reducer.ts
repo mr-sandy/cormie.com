@@ -4,7 +4,7 @@ import { initialiseBoard, initialiseBag } from './helpers';
 import { Dispatch } from 'react';
 
 export const initialState: AppState = {
-  gameState: GameState.NoGame,
+  gameState: GameState.SettingUp,
   board: initialiseBoard(),
   bag: initialiseBag(),
   players: [],
@@ -35,6 +35,7 @@ export function reducer(state: AppState, action: Action): AppState {
     case ActionTypes.START_GAME: {
       return {
         ...state,
+        gameState: GameState.Started,
         players: state.players.map((player, i) =>
           ({
             ...player,

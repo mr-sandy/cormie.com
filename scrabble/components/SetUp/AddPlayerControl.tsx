@@ -1,11 +1,14 @@
 import { useState, FormEvent } from 'react';
+import { useAppDispatch } from '../../Provider';
+import { ActionTypes } from '../../actions';
 
-const AddPlayerControl = (props: any) => {
+function AddPlayer() {
   const [value, setValue] = useState('');
+  const dispatch = useAppDispatch();
 
   const handleSubmit = (event: FormEvent) => {
-    console.log('Submit!! ' + value);
     event.preventDefault();
+    dispatch({type: ActionTypes.ADD_PLAYER, name: value})
   }
 
   return (
@@ -19,4 +22,4 @@ const AddPlayerControl = (props: any) => {
   );
 }
 
-export default AddPlayerControl;
+export default AddPlayer;

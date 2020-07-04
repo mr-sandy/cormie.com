@@ -8,16 +8,3 @@ export type Action =
   { type: ActionTypes.NEW_GAME } |
   { type: ActionTypes.ADD_PLAYER, name: string } |
   { type: ActionTypes.START_GAME };
-
-export const newGame = (): Action => ({
-  type: ActionTypes.NEW_GAME
-});
-
-export const addPlayer = (name: string): Action => ({
-  type: ActionTypes.ADD_PLAYER,
-  name
-});
-
-export const startGame = (): Action => ({
-  type: ActionTypes.START_GAME
-});
