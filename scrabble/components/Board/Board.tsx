@@ -1,5 +1,6 @@
-import { useAppState } from '../../Provider';
-import { Cell, BonusType } from '../../types';
+import { useAppState, useAppDispatch } from '../../Provider';
+import { Cell, BonusType, CellSelection, GameState } from '../../types';
+import { ActionTypes } from '../../actions';
 import TileComponent from '../TileComponent';
 
 const determineColour = (cell: Cell) => {
@@ -19,60 +20,81 @@ const determineColour = (cell: Cell) => {
   }
 }
 
-type SquareProps = {
-  cell: Cell
+
+
+function cellStyle(row: number, column: number, cell: any) {
+  return {
+    gridRow: row + 1,
+    gridColumn: column + 1,
+    backgroundColor: determineColour(cell)
+  };
 }
 
-function Square(props: SquareProps) {
-  const { cell } = props;
-
-  return (
-    <div>
-      {cell.tile && <TileComponent tile={cell.tile} />}
-      <style jsx>
-        {`
-          div {
-            position: relative;
-            border: 1px solid red;
-            box-sizing: border-box;
-            border: 1px solid white;
-            overflow; hidden;
-            background-color: ${determineColour(cell)};
-          }
-          
-          div::before {
-            content: '';
-            display: block;
-            padding-top: 100%;
-          }
-      `}
-      </style>
-    </div>
-  );
+function selectionStyle(selection: CellSelection) {
+  const {startRow, endRow, startColumn, endColumn} = selection;
+  return {
+    gridRowStart: startRow + 1,
+    gridRowEnd: endRow + 2,
+    gridColumnStart: startColumn + 1,
+    gridColumnEnd: endColumn + 2
+  };
 }
 
 function Board() {
-  const { board } = useAppState();
+  const { gameState, board, selection } = useAppState();
+  const dispatch = useAppDispatch();
+
+  const handleCellClick = (row: number, column: number) => {
+    if (gameState === GameState.Started) {
+      dispatch({ type: ActionTypes.SELECT_CELL, row, column });
+    }
+  }
 
   return (
-    <div className='board2'>
-      {board.map((row: any, i: number) => 
-          row.map((cell: any, j: number) => <Square key={j} cell={cell} />
+    <>
+      <div className="board">
+        {board.map((row: any, i: number) =>
+          row.map((cell: any, j: number) => (
+            <div key={`${i},${j}`} className="cell" onClick={() => handleCellClick(i, j)} style={cellStyle(i, j, cell)}>
+              {cell.tile && <TileComponent tile={cell.tile} />}
+            </div>)
           ))
-      }
-      
+        }
+        {selection && <div className="selection" style={selectionStyle(selection)}></div>}
+      </div>
+
       <style jsx>
         {`
-          div.board2 {
+          div.board {
             border: 4px solid black;
             padding: 5%;
             display: grid;
             grid-template-columns: repeat(15, 1fr);
+            grid-template-rows: repeat(15, 1fr);
             grid-gap: 0;
-          }          
+          }   
+
+          div.cell {
+            position: relative;
+            box-sizing: border-box;
+            border: 1px solid white;
+          }
+          
+          div.cell::before {
+            content: '';
+            display: block;
+            padding-top: 100%;
+          }
+
+          div.selection {
+            margin: -3px;
+            border: 3px dashed #333;
+            z-index: 100;
+            pointer-events: none;
+          }
         `}
       </style>
-    </div>
+    </>
   );
 }
 

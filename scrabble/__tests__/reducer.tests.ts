@@ -44,7 +44,6 @@ describe('when setting up a new game', () => {
   });
 });
 
-
 describe('when adding a new player', () => {
   const state: AppState = initialState;
 
@@ -82,6 +81,198 @@ describe('when starting a game', () => {
 
   it('should remove players\' tiles from bag', () => {
     expect(result.bag.length).toBe(86);
+  });
+
+});
+
+describe('when selecting a cell', () => {
+
+  describe('when there is no current selection', () => {
+
+    const state: AppState = {
+      ...initialState
+    };
+
+    const action: Action = { type: ActionTypes.SELECT_CELL, row: 5, column: 6 };
+
+    const result = reducer(state, action);
+
+    it('should set the selection as horizontal', () => {
+      expect(result.selection).not.toBeUndefined();
+      expect(result.selection?.startRow).toBe(5);
+      expect(result.selection?.endRow).toBe(5);
+      expect(result.selection?.startColumn).toBe(6);
+      expect(result.selection?.endColumn).toBe(13);
+    });
+  });
+
+  describe('when there is no current selection (and exceeds horizontal bounds)', () => {
+
+    const state: AppState = {
+      ...initialState
+    };
+
+    const action: Action = { type: ActionTypes.SELECT_CELL, row: 5, column: 10 };
+
+    const result = reducer(state, action);
+
+    it('should set the selection as horizontal', () => {
+      expect(result.selection).not.toBeUndefined();
+      expect(result.selection?.startRow).toBe(5);
+      expect(result.selection?.endRow).toBe(5);
+      expect(result.selection?.startColumn).toBe(10);
+      expect(result.selection?.endColumn).toBe(14);
+    });
+  });
+
+  describe('when it matches the current horizontal selection', () => {
+
+    const state: AppState = {
+      ...initialState,
+      selection: {
+        startRow: 5,
+        endRow: 5,
+        startColumn: 6,
+        endColumn: 14
+      }
+    };
+
+    const action: Action = { type: ActionTypes.SELECT_CELL, row: 5, column: 6 };
+
+    const result = reducer(state, action);
+
+    it('should set the selection as vertical', () => {
+      expect(result.selection).not.toBeUndefined();
+      expect(result.selection?.startRow).toBe(5);
+      expect(result.selection?.endRow).toBe(12);
+      expect(result.selection?.startColumn).toBe(6);
+      expect(result.selection?.endColumn).toBe(6);
+    });
+  });
+
+  describe('when it matches the current horizontal selection (and exceeds vertical bounds)', () => {
+
+    const state: AppState = {
+      ...initialState,
+      selection: {
+        startRow: 9,
+        endRow: 9,
+        startColumn: 10,
+        endColumn: 14
+      }
+    };
+
+    const action: Action = { type: ActionTypes.SELECT_CELL, row: 9, column: 10 };
+
+    const result = reducer(state, action);
+
+    it('should set the selection as vertical', () => {
+      expect(result.selection).not.toBeUndefined();
+      expect(result.selection?.startRow).toBe(9);
+      expect(result.selection?.endRow).toBe(14);
+      expect(result.selection?.startColumn).toBe(10);
+      expect(result.selection?.endColumn).toBe(10);
+    });
+  });
+
+  describe('when it matches the current vertical selection', () => {
+
+    const state: AppState = {
+      ...initialState,
+      selection: {
+        startRow: 5,
+        endRow: 12,
+        startColumn: 6,
+        endColumn: 6
+      }
+    };
+
+    const action: Action = { type: ActionTypes.SELECT_CELL, row: 5, column: 6 };
+
+    const result = reducer(state, action);
+
+    it('should set the selection as horizontal', () => {
+      expect(result.selection).not.toBeUndefined();
+      expect(result.selection?.startRow).toBe(5);
+      expect(result.selection?.endRow).toBe(5);
+      expect(result.selection?.startColumn).toBe(6);
+      expect(result.selection?.endColumn).toBe(13);
+    });
+  });
+
+  describe('when it matches the current vertical selection (and exceeds horizontal bounds)', () => {
+
+    const state: AppState = {
+      ...initialState,
+      selection: {
+        startRow: 9,
+        endRow: 14,
+        startColumn: 10,
+        endColumn: 10
+      }
+    };
+
+    const action: Action = { type: ActionTypes.SELECT_CELL, row: 9, column: 10 };
+
+    const result = reducer(state, action);
+
+    it('should set the selection as horizontal', () => {
+      expect(result.selection).not.toBeUndefined();
+      expect(result.selection?.startRow).toBe(9);
+      expect(result.selection?.endRow).toBe(9);
+      expect(result.selection?.startColumn).toBe(10);
+      expect(result.selection?.endColumn).toBe(14);
+    });
+  });
+
+  describe('when it does not match the current selection', () => {
+
+    const state: AppState = {
+      ...initialState,
+      selection: {
+        startRow: 4,
+        endRow: 4,
+        startColumn: 6,
+        endColumn: 14
+      }
+    };
+
+    const action: Action = { type: ActionTypes.SELECT_CELL, row: 5, column: 6 };
+
+    const result = reducer(state, action);
+
+    it('should set the new selection as horizontal', () => {
+      expect(result.selection).not.toBeUndefined();
+      expect(result.selection?.startRow).toBe(5);
+      expect(result.selection?.endRow).toBe(5);
+      expect(result.selection?.startColumn).toBe(6);
+      expect(result.selection?.endColumn).toBe(13);
+    });
+  });
+
+  describe('when it does not match the current selection (and exceeds horizontal bounds)', () => {
+
+    const state: AppState = {
+      ...initialState,
+      selection: {
+        startRow: 4,
+        endRow: 4,
+        startColumn: 6,
+        endColumn: 14
+      }
+    };
+
+    const action: Action = { type: ActionTypes.SELECT_CELL, row: 9, column: 10 };
+
+    const result = reducer(state, action);
+
+    it('should set the new selection as horizontal', () => {
+      expect(result.selection).not.toBeUndefined();
+      expect(result.selection?.startRow).toBe(9);
+      expect(result.selection?.endRow).toBe(9);
+      expect(result.selection?.startColumn).toBe(10);
+      expect(result.selection?.endColumn).toBe(14);
+    });
   });
 
 });

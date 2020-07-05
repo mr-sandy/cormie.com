@@ -29,10 +29,18 @@ export type Player = {
   score: number
 }
 
+export type CellSelection = {
+  startRow: number,
+  startColumn: number,
+  endRow: number,
+  endColumn: number
+}
+
 export type AppState = {
   gameState: GameState;
   board: Board;
   bag: Tile[],
   players: Player[],
-  currentPlayer?: number
+  currentPlayer: number,
+  selection?: CellSelection
 };

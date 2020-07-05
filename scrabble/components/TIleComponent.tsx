@@ -14,14 +14,16 @@ const TileComponent = (props: TileComponentProps) => {
     <div>{tile.letter}
       <style jsx>
         {`
-div {
-  background-color: rgb(255,241,191);
-  width: 100%;
-  height: 100%;
-  text-align: center;
-  font-family: Futura, Trebuchet MS, Arial, sans-serif;
-  font-weight: 500;
-  position: absolute;
+          div {
+            background-color: rgb(255,241,191);
+            text-align: center;
+            font-family: Futura, Trebuchet MS, Arial, sans-serif;
+            font-weight: 500;
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
 }
 `}
       </style>

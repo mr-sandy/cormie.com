@@ -81,5 +81,10 @@ export const initialiseBoard = (): Cell[][] => {
     board.push(rowCells);
   }
 
+  // board[7][5].tile = {letter: 'S', value: 1};
+  // board[7][6].tile = {letter: 'A', value: 1};
+  // board[7][7].tile = {letter: 'N', value: 1};
+  // board[7][8].tile = {letter: 'D', value: 1};
+  // board[7][9].tile = {letter: 'Y', value: 1};
   return board;
 }
