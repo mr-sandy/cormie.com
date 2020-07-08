@@ -1,6 +1,6 @@
 import { AppState, GameState } from './types';
 import { Action, ActionTypes } from './actions';
-import { initialiseBoard, initialiseBag } from './helpers';
+import { initialiseBoard, initialiseBag, findSelection } from './helpers';
 
 export const initialState: AppState = {
   gameState: GameState.SettingUp,
@@ -8,6 +8,7 @@ export const initialState: AppState = {
   bag: initialiseBag(),
   players: [],
   currentPlayer: 0,
+  candidateWord: [],
   selection: undefined
 };
 
@@ -46,43 +47,76 @@ export function reducer(state: AppState, action: Action): AppState {
     };
 
     case ActionTypes.SELECT_CELL: {
-      if (!state.selection) {
-        return {
-          ...state,
-          selection: {
-            startRow: action.row,
-            endRow: action.row,
-            startColumn: action.column,
-            endColumn: Math.min(14, action.column + 7)
+      if (state.selection?.startRow === action.row && state.selection?.startColumn === action.column) {
+        const permitHorizontal = state.selection.startRow !== state.selection.endRow;
+
+        const newSelection = findSelection(state.board, action.row, action.column, permitHorizontal);
+
+        return newSelection.valid
+          ? {
+            ...state,
+            selection: newSelection
           }
-        };
+          : state;
       }
       else {
-        if (state.selection.startRow === action.row && state.selection.startColumn === action.column) {
-          const isHorizontal = state.selection.startRow === state.selection.endRow;
-          return {
-            ...state,
-            selection: {
-              startRow: action.row,
-              endRow: isHorizontal ? Math.min(14, action.row + 7) : action.row,
-              startColumn: action.column,
-              endColumn: isHorizontal ? action.column : Math.min(14, action.column + 7) 
-            }
-          };
-        }
-        else {
-          return {
-            ...state,
-            selection: {
-              startRow: action.row,
-              endRow: action.row,
-              startColumn: action.column,
-              endColumn: Math.min(14, action.column + 7)
-              }
-          };
-        }
+        return {
+          ...state,
+          selection: findSelection(state.board, action.row, action.column)
+        };
       }
     }
+
+    case ActionTypes.SELECT_TILE: {
+      return {
+        ...state,
+        candidateWord: [
+          ...state.candidateWord,
+          action.tile
+        ]
+      }
+    };
+
+    // if (!state.selection) {
+    //   return {
+    //     ...state,
+    //     selection: {
+    //       startRow: action.row,
+    //       endRow: action.row,
+    //       startColumn: action.column,
+    //       endColumn: Math.min(14, action.column + 7),
+    //       valid: isValidSelection()
+    //     }
+    //   };
+    // }
+    // else {
+    //   if (state.selection.startRow === action.row && state.selection.startColumn === action.column) {
+    //     const isHorizontal = state.selection.startRow === state.selection.endRow;
+    //     return {
+    //       ...state,
+    //       selection: {
+    //         startRow: action.row,
+    //         endRow: isHorizontal ? Math.min(14, action.row + 7) : action.row,
+    //         startColumn: action.column,
+    //         endColumn: isHorizontal ? action.column : Math.min(14, action.column + 7),
+    //         valid: isValidSelection()
+    //       }
+    //     };
+    //   }
+    //   else {
+    //     return {
+    //       ...state,
+    //       selection: {
+    //         startRow: action.row,
+    //         endRow: action.row,
+    //         startColumn: action.column,
+    //         endColumn: Math.min(14, action.column + 7),
+    //         valid: isValidSelection()
+    //       }
+    //     };
+    //   }
+    // }
+
 
     default:
       return state;

@@ -1,5 +1,5 @@
 import { useAppState, useAppDispatch } from '../../Provider';
-import { Cell, BonusType, CellSelection, GameState } from '../../types';
+import { Cell, BonusType, Selection, GameState } from '../../types';
 import { ActionTypes } from '../../actions';
 import TileComponent from '../TileComponent';
 
@@ -30,7 +30,7 @@ function cellStyle(row: number, column: number, cell: any) {
   };
 }
 
-function selectionStyle(selection: CellSelection) {
+function selectionStyle(selection: Selection) {
   const {startRow, endRow, startColumn, endColumn} = selection;
   return {
     gridRowStart: startRow + 1,
@@ -60,7 +60,7 @@ function Board() {
             </div>)
           ))
         }
-        {selection && <div className="selection" style={selectionStyle(selection)}></div>}
+        {selection && <div className={`selection ${selection.valid ? '' : 'invalid'}`} style={selectionStyle(selection)}></div>}
       </div>
 
       <style jsx>
@@ -87,15 +87,22 @@ function Board() {
           }
 
           div.selection {
-            margin: -3px;
-            border: 3px dashed #333;
+            margin: -4px;
+            border: 4px dashed #333;
             z-index: 100;
             pointer-events: none;
           }
-        `}
+
+          div.selection.invalid {
+            border: 4px dashed red;
+          }
+`}
       </style>
     </>
   );
 }
+            // opacity: 0.5;
+            // background-image: linear-gradient(45deg, #f00c3a 15%, #ffffff 15%, #ffffff 50%, #f00c3a 50%, #f00c3a 65%, #ffffff 65%, #ffffff 100%);
+            // background-size: 14.14px 14.14px;
 
 export default Board;

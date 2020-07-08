@@ -29,11 +29,12 @@ export type Player = {
   score: number
 }
 
-export type CellSelection = {
+export type Selection = {
   startRow: number,
   startColumn: number,
   endRow: number,
-  endColumn: number
+  endColumn: number,
+  valid: boolean
 }
 
 export type AppState = {
@@ -42,5 +43,6 @@ export type AppState = {
   bag: Tile[],
   players: Player[],
   currentPlayer: number,
-  selection?: CellSelection
+  candidateWord: Tile[],
+  selection?: Selection
 };

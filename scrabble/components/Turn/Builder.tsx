@@ -1,12 +1,12 @@
 import { useAppState } from "../../Provider";
 
 function Builder() {
-  const { selection, board } = useAppState();
+  const { selection, candidateWord } = useAppState();
 
-  if (selection) {
+  if (candidateWord) {
     return (
       <>
-        <h1>builder</h1>
+        <h1>{candidateWord.map((tile, i) => <span key={i}>{tile.letter}</span>)}</h1>
       </>
 
     );

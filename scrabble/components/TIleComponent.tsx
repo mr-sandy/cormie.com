@@ -1,17 +1,18 @@
 import { Tile } from '../types';
 
 type TileComponentProps = {
-  tile: Tile
+  tile: Tile,
+  onClick?: any
 };
 
 
 const TileComponent = (props: TileComponentProps) => {
-  const { tile } = props;
+  const { tile, onClick = () => { } } = props;
 
   //      <span>{tile.value}</span>
 
   return (
-    <div>{tile.letter}
+    <div onClick={() => onClick()}>{tile.letter}
       <style jsx>
         {`
           div {
