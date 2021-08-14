@@ -1,77 +1,44 @@
-import { reducer, initialState } from '../reducer';
-import { AppState, GameState } from '../types';
+import { reducer, getInitialState } from '../reducer';
+import { GameState } from '../types';
 import { ActionTypes, Action } from '../actions';
+import { Game } from '../domain';
 
-describe('when using initialState', () => {
-  it('should have state of SettingUp', () => {
-    expect(initialState.gameState).toBe(GameState.SettingUp);
+describe('Before anything happens', () => {
+  const state: Game = getInitialState();
+
+  it('should have game state of setting up', () => {
+    expect(state.gameState).toBe(GameState.SettingUp);
   });
 
-  it('should fill the bag with 100 tiles', () => {
-    expect(initialState.bag).toHaveLength(100);
-  });
-
-  it('should have no players', () => {
-    expect(initialState.players).toHaveLength(0);
-  });
-
-  it('should have a board', () => {
-    expect(initialState.board).toHaveLength(15);
+  it('should have a full bag', () => {
+    expect(state.bag).toHaveLength(100);
   });
 });
 
-describe('when setting up a new game', () => {
-  const state: AppState = {
-    ...initialState,
-    gameState: GameState.Started,
-    bag: initialState.bag.slice(50)
-  };
 
-  const action: Action = { type: ActionTypes.NEW_GAME };
-
-  const result = reducer(state, action);
-
-  it('should reset the game state', () => {
-    expect(result.gameState).toBe(GameState.SettingUp);
-  });
-
-  it('should refill the bag with 100 tiles', () => {
-    expect(result.bag).toHaveLength(100);
-  });
-
-  it('should have no players', () => {
-    expect(initialState.players).toHaveLength(0);
-  });
-});
-
-describe('when adding a new player', () => {
-  const state: AppState = initialState;
-
+describe('When adding a player', () => {
+  const state: Game = getInitialState();
   const action: Action = { type: ActionTypes.ADD_PLAYER, name: 'Player 1' };
 
   const result = reducer(state, action);
 
-  it('should add the player', () => {
+  it('should include the new player in the list', () => {
     expect(result.players).toHaveLength(1);
     expect(result.players[0].name).toBe('Player 1');
   });
 });
 
 describe('when starting a game', () => {
-  const state: AppState = {
-    ...initialState,
-    players: [
-      { name: 'player one', tiles: [], score: 0 },
-      { name: 'player two', tiles: [], score: 0 }
-    ]
-  };
+  const state: Game = getInitialState();
+  state.addPlayer('Player one');
+  state.addPlayer('Player two');
 
   const action: Action = { type: ActionTypes.START_GAME };
 
   const result = reducer(state, action);
 
-  it('should set the current player (index) to zero', () => {
-    expect(result.currentPlayer).toBe(0);
+  it('should set the game state to started', () => {
+    expect(result.gameState).toBe(GameState.Started);
   });
 
   it('should give each current player seven tiles', () => {
@@ -79,146 +46,229 @@ describe('when starting a game', () => {
     expect(result.players[1].tiles).toHaveLength(7);
   });
 
-  it('should remove players\' tiles from bag', () => {
-    expect(result.bag.length).toBe(86);
-  });
+  // it('should remove players\' tiles from bag', () => {
+  //   expect(result.bag.length).toBe(86);
+  // });
 
 });
 
-describe('when selecting a cell', () => {
-  describe('when there is no existing selection', () => {
-    describe('and the selection includes the start cell', () => {
+// describe('when using initialState', () => {
+//   it('should have state of SettingUp', () => {
+//     expect(initialState.gameState).toBe(GameState.SettingUp);
+//   });
 
-      const state: AppState = {
-        ...initialState
-      };
+//   it('should fill the bag with 100 tiles', () => {
+//     expect(initialState.bag).toHaveLength(100);
+//   });
 
-      const action: Action = {
-        type: ActionTypes.SELECT_CELL,
-        row: 7,
-        column: 7
-      };
+//   it('should have no players', () => {
+//     expect(initialState.players).toHaveLength(0);
+//   });
 
-      const result = reducer(state, action);
+//   it('should have a board', () => {
+//     expect(initialState.board).toHaveLength(15);
+//   });
+// });
 
-      const { selection } = result;
+// describe('when setting up a new game', () => {
+//   const state: AppState = {
+//     ...initialState,
+//     gameState: GameState.Started,
+//     bag: initialState.bag.slice(50)
+//   };
 
-      it('should set a valid selection', () => {
-        expect(selection?.valid).toBe(true);
-      });
-    });
+//   const action: Action = { type: ActionTypes.NEW_GAME };
 
-    describe('and the selection does not include the start cell', () => {
+//   const result = reducer(state, action);
 
-      const state: AppState = {
-        ...initialState
-      };
+//   it('should reset the game state', () => {
+//     expect(result.gameState).toBe(GameState.SettingUp);
+//   });
 
-      const action: Action = {
-        type: ActionTypes.SELECT_CELL,
-        row: 6,
-        column: 6
-      };
+//   it('should refill the bag with 100 tiles', () => {
+//     expect(result.bag).toHaveLength(100);
+//   });
 
-      const result = reducer(state, action);
+//   it('should have no players', () => {
+//     expect(initialState.players).toHaveLength(0);
+//   });
+// });
 
-      const { selection } = result;
+// describe('when adding a new player', () => {
+//   const state: AppState = initialState;
 
-      it('should set a invalid selection', () => {
-        expect(selection?.valid).toBe(false);
-      });
-    });
-  });
+//   const action: Action = { type: ActionTypes.ADD_PLAYER, name: 'Player 1' };
 
-  describe('when there is an existing selection', () => {
-    describe('and the new selection starts on the same start cell', () => {
-      describe('and the existing selection is horizontal and a vertical selection is possible', () => {
-        const state: AppState = {
-          ...initialState,
-          selection: {
-            startRow: 7,
-            endRow: 7,
-            startColumn: 7,
-            endColumn: 13,
-            valid: true
-          }
-        };
+//   const result = reducer(state, action);
 
-        const action: Action = {
-          type: ActionTypes.SELECT_CELL,
-          row: 7,
-          column: 7
-        };
+//   it('should add the player', () => {
+//     expect(result.players).toHaveLength(1);
+//     expect(result.players[0].name).toBe('Player 1');
+//   });
+// });
 
-        const result = reducer(state, action);
+// describe('when starting a game', () => {
+//   const state: AppState = {
+//     ...initialState,
+//     players: [
+//       { name: 'player one', tiles: [], score: 0 },
+//       { name: 'player two', tiles: [], score: 0 }
+//     ]
+//   };
 
-        const { selection } = result;
+//   const action: Action = { type: ActionTypes.START_GAME };
 
-        it('should return a vertical selection', () => {
-          expect(selection?.startRow).toBe(7);
-          expect(selection?.endRow).toBe(13);
-          expect(selection?.startColumn).toBe(7);
-          expect(selection?.endColumn).toBe(7);
-          expect(selection?.valid).toBe(true);
-        });
-      });
+//   const result = reducer(state, action);
 
-      describe('and the existing selection is horizontal and a vertical selection is not possible', () => {
-        const state: AppState = {
-          ...initialState,
-          selection: {
-            startRow: 7,
-            endRow: 7,
-            startColumn: 6,
-            endColumn: 12,
-            valid: true
-          }
-        };
+//   it('should set the current player (index) to zero', () => {
+//     expect(result.currentPlayer).toBe(0);
+//   });
 
-        const action: Action = {
-          type: ActionTypes.SELECT_CELL,
-          row: 7,
-          column: 6
-        };
+//   it('should give each current player seven tiles', () => {
+//     expect(result.players[0].tiles).toHaveLength(7);
+//     expect(result.players[1].tiles).toHaveLength(7);
+//   });
 
-        const result = reducer(state, action);
+//   it('should remove players\' tiles from bag', () => {
+//     expect(result.bag.length).toBe(86);
+//   });
 
-        const { selection } = result;
+// });
 
-        it('should retain the horizontal selection', () => {
-          expect(selection?.startRow).toBe(7);
-          expect(selection?.endRow).toBe(7);
-          expect(selection?.startColumn).toBe(6);
-          expect(selection?.endColumn).toBe(12);
-          expect(selection?.valid).toBe(true);
-        });
+// describe('when selecting a cell', () => {
+//   describe('when there is no existing selection', () => {
+//     describe('and the selection includes the start cell', () => {
 
-      });
-    });
-  });
-});
+//       const state: AppState = {
+//         ...initialState
+//       };
 
-describe('when selecting a tile', () => {
-  const state: AppState = {
-    ...initialState,
-    players: [
-      { name: 'player one', tiles: [{ letter: 'a', value: 1 }, { letter: 'a', value: 1 }, { letter: 'b', value: 1 }, { letter: 'c', value: 1 }], score: 0 },
-      { name: 'player two', tiles: [{ letter: 'a', value: 1 }, { letter: 's', value: 1 }, { letter: 'd', value: 1 }, { letter: 'f', value: 1 }], score: 0 }
-    ]
-  };
+//       const action: Action = {
+//         type: ActionTypes.SELECT_CELL,
+//         row: 7,
+//         column: 7
+//       };
 
-  const action: Action = {
-    type: ActionTypes.SELECT_TILE,
-    tile: state.players[0].tiles[1],
-    player: 0
-  };
+//       const result = reducer(state, action);
 
-  const result = reducer(state, action);
+//       const { selection } = result;
 
-  it('should set add the tile to the current turn\'s candidate word', () => {
-    expect(result.candidateWord).toEqual([{ letter: 'a', value: 1 }]);
-  });
-});
+//       it('should set a valid selection', () => {
+//         expect(selection?.valid).toBe(true);
+//       });
+//     });
+
+//     describe('and the selection does not include the start cell', () => {
+
+//       const state: AppState = {
+//         ...initialState
+//       };
+
+//       const action: Action = {
+//         type: ActionTypes.SELECT_CELL,
+//         row: 6,
+//         column: 6
+//       };
+
+//       const result = reducer(state, action);
+
+//       const { selection } = result;
+
+//       it('should set a invalid selection', () => {
+//         expect(selection?.valid).toBe(false);
+//       });
+//     });
+//   });
+
+//   describe('when there is an existing selection', () => {
+//     describe('and the new selection starts on the same start cell', () => {
+//       describe('and the existing selection is horizontal and a vertical selection is possible', () => {
+//         const state: AppState = {
+//           ...initialState,
+//           selection: {
+//             startRow: 7,
+//             endRow: 7,
+//             startColumn: 7,
+//             endColumn: 13,
+//             valid: true
+//           }
+//         };
+
+//         const action: Action = {
+//           type: ActionTypes.SELECT_CELL,
+//           row: 7,
+//           column: 7
+//         };
+
+//         const result = reducer(state, action);
+
+//         const { selection } = result;
+
+//         it('should return a vertical selection', () => {
+//           expect(selection?.startRow).toBe(7);
+//           expect(selection?.endRow).toBe(13);
+//           expect(selection?.startColumn).toBe(7);
+//           expect(selection?.endColumn).toBe(7);
+//           expect(selection?.valid).toBe(true);
+//         });
+//       });
+
+//       describe('and the existing selection is horizontal and a vertical selection is not possible', () => {
+//         const state: AppState = {
+//           ...initialState,
+//           selection: {
+//             startRow: 7,
+//             endRow: 7,
+//             startColumn: 6,
+//             endColumn: 12,
+//             valid: true
+//           }
+//         };
+
+//         const action: Action = {
+//           type: ActionTypes.SELECT_CELL,
+//           row: 7,
+//           column: 6
+//         };
+
+//         const result = reducer(state, action);
+
+//         const { selection } = result;
+
+//         it('should retain the horizontal selection', () => {
+//           expect(selection?.startRow).toBe(7);
+//           expect(selection?.endRow).toBe(7);
+//           expect(selection?.startColumn).toBe(6);
+//           expect(selection?.endColumn).toBe(12);
+//           expect(selection?.valid).toBe(true);
+//         });
+
+//       });
+//     });
+//   });
+// });
+
+// describe('when selecting a tile', () => {
+//   const state: AppState = {
+//     ...initialState,
+//     players: [
+//       { name: 'player one', tiles: [{ letter: 'a', value: 1 }, { letter: 'a', value: 1 }, { letter: 'b', value: 1 }, { letter: 'c', value: 1 }], score: 0 },
+//       { name: 'player two', tiles: [{ letter: 'a', value: 1 }, { letter: 's', value: 1 }, { letter: 'd', value: 1 }, { letter: 'f', value: 1 }], score: 0 }
+//     ]
+//   };
+
+//   const action: Action = {
+//     type: ActionTypes.SELECT_TILE,
+//     tile: state.players[0].tiles[1],
+//     player: 0
+//   };
+
+//   const result = reducer(state, action);
+
+//   it('should set add the tile to the current turn\'s candidate word', () => {
+//     expect(result.candidateWord).toEqual([{ letter: 'a', value: 1 }]);
+//   });
+// });
 
 // describe('when selecting a cell', () => {
 

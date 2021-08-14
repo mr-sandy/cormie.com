@@ -1,15 +1,16 @@
-import { reducer, initialState } from './reducer';
-import React, { useReducer, Dispatch, useContext } from 'react';
+import { reducer, getInitialState } from './reducer';
+import React, { useReducer, Dispatch } from 'react';
 import { Action } from './actions';
-import { AppState } from './types';
+import produce from 'immer';
+import { Game } from './domain';
 
 const DispatchContext = React.createContext<Dispatch<Action> | undefined>(undefined);
-const StateContext = React.createContext<AppState | undefined>(undefined);
+const StateContext = React.createContext<Game | undefined>(undefined);
 
 type CountProviderProps = { children: React.ReactNode }
 
 function Provider({ children }: CountProviderProps) {
-  const [state, dispatch] = useReducer(reducer, initialState);
+  const [state, dispatch] = useReducer( produce(reducer), getInitialState());
   return (
     <StateContext.Provider value={state}>
       <DispatchContext.Provider value={dispatch}>
