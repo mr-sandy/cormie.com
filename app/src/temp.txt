@@ -1,0 +1,65 @@
+Product Screening ​
+Product Risk Management ​
+Product Charting ​
+Product Perinatal Mental health ​
+Product Smoking in Pregnancy ​
+Product Clinical Trial (PRIOR) ​
+Product CTG – Nice Guidelines 2022 ​
+Product Clinics & Appointment Books ​
+Product Badger Notes – NHS login integration ​
+Product Blood Screening Reasoning ​
+Product Active Infusions (Fluids and Additives) ​
+Product Cardiovascular Surgery Details ​
+Product Equipment Serial Number Scope ​
+Tech    Harden the Azure Virtual Networks ​
+Tech    iPad Stability ​
+Tech    Investigate MAUI upgrade suitability ​
+Tech    Reduce Project Dependencies & .NET Standard upgrade ​
+Tech    Migration to Twilio ​
+
+Product CMM HPCA delivery​
+Product Wales 111 Service improvements​
+Product Launch EPMA from inpatients & Patient Flow in patient context to prescribe and record administrations
+
+Q2
+
+Product Labour & Birth ​
+Product Postnatal Care ​
+Product Specialist Reviews / Obstetric AN Care ​
+Product Tasks and Reminders GROW 1.5 to 2.0 ​
+Product Pelvic Health ​
+Product BSOTS Enhancements ​
+Product Badger Notes – Translations ​
+Product Baby Examinations ​
+Product North of Scotland Encryption in Transit​
+Product Portsmouth Version 8.2 issues​
+Product Pharmatrac Phase 1​
+Product CMM HPCA delivery​
+Product CareFlow EPMA to GE patient transfer of care in ICU​
+Product Dose Calculator Fixes
+
+Tech    Resolve SQL Injection vulnerabilities​
+Tech    Assess WAF Capability ​
+
+Q3
+
+Product Diabetes / Endocrine ​
+Product Ultrasound & Fetal Medicine ​
+Product NZ Neonatal EPR ​
+Product Remedial work (Scoring / CE) ​
+Product EPR – Clinical Allied Health ​
+Product GBS3 Trial ​
+Product Data Requirements for Public Health Scotland ​
+Product EPAGU Enhancements ​
+
+Tech    Failover Readiness (Monitoring & Alerting) ​
+Tech    Review of API Endpoints ​
+Tech    Remove anonymous script execution in BBE and BNF2 services ​
+Tech    Upgrade Badger Notes from Xamarin to MAUI ​
+Tech    Remove redundant end points ​
+Tech    App Server Performance ​
+Tech    EDS 6.0 Upgrade ​
+Tech    CMM code modernisation - VB.NET to C# conversion​
+Tech    Upgrade from .NET 4.8 to .NET6​
+Tech    Upgrade CMM database to IRIS Version 2023.1​
+Tech    North of Scotland Encryption in Transit PHASE 2 
